@@ -78,9 +78,47 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function profile_update(Request $request)
     {
-        //
+        $user = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|max:50',
+            'gender' => 'required',
+            'phone' => 'required|digits_between:7,15',
+            'address' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    'code' => 422,
+                    'success' => false,
+                    'message' => 'Invalid input.',
+                    'errors' => $validator->errors()
+                ],
+                422
+            );
+        } else {
+
+            $data = [
+                'name' => $request->input('name'),
+                'gender' => $request->input('gender'),
+                'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
+            ];
+
+            Customer::where('id', $user->id)->update($data);
+
+            $user = Customer::with('vehicles')->find($user->id);
+
+            $msg = [
+                'success' => true,
+                'message' => 'Profil anda berhasil diperbarui!',
+                'data' => $user
+            ];
+
+            return response()->json($msg, 201);
+        }
     }
 
     /**
