@@ -18,7 +18,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $data['payments'] = Payment::all();
+        $data['payments'] = Payment::with(['service', 'admin'])->paginate(10);
         return view('payment.index', $data);
     }
 
@@ -43,7 +43,7 @@ class PaymentController extends Controller
                 $update['note'] = $request->note;
                 $update['next_service_date'] = $request->next_service_date;
                 $updated = Service::where('reservation_id', $request->reservation_id)->update($update);
-                if($updated) {
+                if ($updated) {
                     $data['reservation'] = Reservation::where('id', $request->reservation_id)->with(['customer', 'service', 'package'])->first();
                 }
             }
@@ -81,7 +81,7 @@ class PaymentController extends Controller
         $redirect = 'payment';
         DB::beginTransaction();
         try {
-            Payment::insert($data);
+            Payment::create($data);
             if ($request->has('service_id')) {
                 Service::where('id', $request->service_id)->update(['status' => 'Finish']);
                 $redirect = 'reservation';

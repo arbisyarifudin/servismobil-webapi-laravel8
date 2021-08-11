@@ -86,6 +86,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('reservation') }}">Reservasi</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('payment') }}">Pembayaran</a>
+                            </li>
                         </ul>
                     @endauth
 
@@ -117,7 +120,7 @@
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                                                                                                                                 document.getElementById('logout-form').submit();">
+                                                                                                                                                                                         document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 

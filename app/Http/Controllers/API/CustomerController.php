@@ -167,6 +167,7 @@ class CustomerController extends Controller
                 'email' => $request->input('email'),
                 'gender' => $request->input('gender'),
                 'address' => $request->input('address'),
+                'phone' => $request->input('phone'),
                 'photo' => 'ava-default.jpg',
                 'password' => Hash::make($request->input('address')),
             ]);
