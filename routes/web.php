@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MechanicController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackageProductController;
 use App\Http\Controllers\PaymentController;
@@ -52,6 +53,7 @@ Route::middleware('auth:admin')->group(function () {
         'reservation' => ReservationController::class,
         'service' => ServiceController::class,
         'payment' => PaymentController::class,
+        'notification' => NotificationController::class,
     ]);
 
     //     Route::prefix("/product")->group(function ($route) {
@@ -60,3 +62,4 @@ Route::middleware('auth:admin')->group(function () {
 });
 
 Route::put('/service/{service}/status', [ServiceController::class, 'update_status']);
+Route::get('/notification/open/{id}', [NotificationController::class, 'open']);

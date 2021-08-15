@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
@@ -57,7 +59,6 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-
     }
 
     /**
@@ -155,34 +156,52 @@ class CustomerController extends Controller
             );
         } else {
 
-            $username = str_replace(" ", "", strtolower($request->input('name')));
-            $cek_username = Customer::where('username', $username)->count();
-            if ($cek_username > 0) {
-                $username = $username . ($cek_username + 1);
+            DB::beginTransaction();
+
+            try {
+
+                $username = str_replace(" ", "", strtolower($request->input('name')));
+                $cek_username = Customer::where('username', $username)->count();
+                if ($cek_username > 0) {
+                    $username = $username . ($cek_username + 1);
+                }
+
+                $customer = Customer::create([
+                    'name' => $request->input('name'),
+                    'username' => $username,
+                    'email' => $request->input('email'),
+                    'gender' => $request->input('gender'),
+                    'address' => $request->input('address'),
+                    'phone' => $request->input('phone'),
+                    'photo' => 'ava-default.jpg',
+                    'password' => Hash::make($request->input('address')),
+                ]);
+
+                $accessToken = $customer->createToken('customer_token')->accessToken;
+                $user = Customer::with('vehicles')->find($customer->id);
+
+                // create notif
+                $data_notif['sender_id'] = $customer->id;
+                $data_notif['recipient_id'] = null;
+                $data_notif['type'] = 'customers';
+                $data_notif['is_read'] = 0;
+
+                Notification::create($data_notif);
+
+                $msg = [
+                    'success' => true,
+                    'message' => 'Customer registered successfully!',
+                    'data' => [
+                        'user' =>  $user,
+                        'token' => $accessToken,
+                    ],
+                ];
+
+                DB::commit();
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                throw $th;
             }
-
-            $customer = Customer::create([
-                'name' => $request->input('name'),
-                'username' => $username,
-                'email' => $request->input('email'),
-                'gender' => $request->input('gender'),
-                'address' => $request->input('address'),
-                'phone' => $request->input('phone'),
-                'photo' => 'ava-default.jpg',
-                'password' => Hash::make($request->input('address')),
-            ]);
-
-            $accessToken = $customer->createToken('customer_token')->accessToken;
-            $user = Customer::with('vehicles')->find($customer->id);
-
-            $msg = [
-                'success' => true,
-                'message' => 'Customer registered successfully!',
-                'data' => [
-                    'user' =>  $user,
-                    'token' => $accessToken,
-                ],
-            ];
 
             return response()->json($msg, 201);
         }
@@ -262,7 +281,6 @@ class CustomerController extends Controller
                 200
             );
         }
-       
     }
 
     public function logout(Request $request)
@@ -279,5 +297,4 @@ class CustomerController extends Controller
             );
         }
     }
-
 }

@@ -25,6 +25,21 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('font/css/open-iconic-bootstrap.css') }}" rel="stylesheet">
 
+    <style>
+        #main-menu .nav-link.notif {
+            position: relative;
+        }
+
+        #main-menu .nav-link.notif .badge {
+            position: absolute;
+            right: 0;
+            top: 5px;
+            font-size: 10px;
+            padding: 1px 2px;
+        }
+
+    </style>
+
     @stack('style')
 
 </head>
@@ -36,13 +51,12 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu"
+                    aria-controls="main-menu" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse" id="main-menu">
                     <!-- Left Side Of Navbar -->
                     @auth
                         <ul class="navbar-nav mr-auto">
@@ -108,6 +122,15 @@
                                 </li>
                             @endif
                         @else
+                            @php
+                                $notif = App\Models\Notification::where('is_read', 0)
+                                    ->get()
+                                    ->count();
+                            @endphp
+                            <li class="nav-item">
+                                <a class="nav-link notif" href="{{ url('notification') }}"><i class="far fa-bell"></i>
+                                    <span class="badge bagde-pill badge-primary">{{ $notif }}</span></a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -120,7 +143,7 @@
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                                                                                                                                                                         document.getElementById('logout-form').submit();">
+                                                                                                                                                                                                                                     document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 

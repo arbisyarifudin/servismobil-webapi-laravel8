@@ -94,6 +94,11 @@
 -   tanggal_servis_pemesanan <-- tanggal servis yang booking
 -   tipe_pemesanan [Via Aplikasi, Langsung]
 
+---
+
+-   konfirmasi_kehadiran
+-   pesan_konfirmasi_kehadiran
+
 ### servis
 
 -   id_servis PK
@@ -113,3 +118,10 @@
 -   kembalian_pembayaran
 -   metode_pembayaran [Tunai, Kartu]
 -   catatan_pembayaran
+
+## pemberitahuan
+
+-   id_pemberitahuan
+-   id_pemesanan
+-   id_admin
+-   status [Dibaca, Belum Dibaca]
