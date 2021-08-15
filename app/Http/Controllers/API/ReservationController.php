@@ -207,7 +207,16 @@ class ReservationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $reservation = tap(Reservation::where('id', $id))->update($input)->first();
+        $response = [
+            'code' => 200,
+            'success' => true,
+            'message' => 'Reservasi berhasil diperbarui',
+            'data' => $reservation,
+        ];
+
+        return response()->json($response, $response['code']);
     }
 
     /**

@@ -23,6 +23,8 @@ class CreateReservationsTable extends Migration
             $table->date('reservation_date');
             $table->time('reservation_time');
             $table->enum('reservation_origin', ['Online', 'Offline'])->default('Online');
+            $table->enum('attendance_confirmation', ['Present', 'Not Present'])->nullable();
+            $table->text('attendance_message')->nullable();
             // $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
             $table->timestamps();
         });

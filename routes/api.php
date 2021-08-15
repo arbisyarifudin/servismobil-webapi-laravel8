@@ -42,6 +42,7 @@ Route::post('/reservation', [ReservationController::class, 'store']);
 Route::get('/reservation', [ReservationController::class, 'index']);
 Route::get('/reservation/mine', [ReservationController::class, 'mine'])->middleware('auth:customer');
 Route::get('/reservation/{id}', [ReservationController::class, 'show']);
+Route::put('/reservation/{id}', [ReservationController::class, 'update']);
 
 // Vehicle
 Route::post('/vehicle', [VehicleController::class, 'store']);
