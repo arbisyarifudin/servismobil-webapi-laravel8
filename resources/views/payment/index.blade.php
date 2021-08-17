@@ -51,7 +51,7 @@
                                     @endforeach
                                     @if (count($payments) < 1)
                                         <tr>
-                                            <td colspan="5" class="text-center">Data kosong.</td>
+                                            <td colspan="8" class="text-center">Data kosong.</td>
                                         </tr>
                                     @endif
                                 </tbody>
