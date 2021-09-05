@@ -1,2 +1,2 @@
 ## Tentang
-Project ini diperuntukan untuk halaman web untuk Administrator sekaligus penyedia API / endpoint untuk Aplikasi Android untuk Servis Mobil.
+Project ini dibuat sebagai halaman website untuk Pengelola/Administrator sekaligus sebagai penyedia API / endpoint untuk Aplikasi Android Servis Mobil yang terpisah.
